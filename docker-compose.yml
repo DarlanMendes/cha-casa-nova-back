@@ -8,9 +8,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ep-little-cloud-a4kqhyef.us-east-1.aws.neon.tech:5432/verceldb
       - SPRING_DATASOURCE_USERNAME=default
       - SPRING_DATASOURCE_PASSWORD=bt0sEfdGA8Cg
-      # - SERVER_PORT=${PORT} # Render define a variável PORT automaticamente
+      - SERVER_PORT=${PORT} # Render define a variável PORT automaticamente
     ports:
-      - "8080:8080"
+      - "${PORT}:${PORT}"
     depends_on:
       - wait-for-db
 
