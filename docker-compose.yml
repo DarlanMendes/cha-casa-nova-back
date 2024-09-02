@@ -3,11 +3,18 @@ version: '3.8'
 services:
   app:
     build: .
-    container_name: springboot-app
+    container_name: spring-boot-app
     environment:
-      DATABASE_URL: jdbc:postgres://default:bt0sEfdGA8Cg@ep-little-cloud-a4kqhyef.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require
-      
-      DATABASE_USERNAME: default
-      DATABASE_PASSWORD: bt0sEfdGA8Cg
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ep-little-cloud-a4kqhyef.us-east-1.aws.neon.tech:5432/verceldb
+      - SPRING_DATASOURCE_USERNAME=default
+      - SPRING_DATASOURCE_PASSWORD=bt0sEfdGA8Cg
+      # - SERVER_PORT=${PORT} # Render define a variável PORT automaticamente
     ports:
       - "8080:8080"
+    depends_on:
+      - wait-for-db
+
+  wait-for-db:
+    image: jwilder/dockerize
+    # command: dockerize -wait tcp://${DB_HOST}:${DB_PORT} -timeout 60s
+    depends_on: []
