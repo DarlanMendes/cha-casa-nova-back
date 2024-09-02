@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: springboot-app
+    environment:
+      DATABASE_URL: jdbc:postgres://default:bt0sEfdGA8Cg@ep-little-cloud-a4kqhyef.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require
+      
+      DATABASE_USERNAME: default
+      DATABASE_PASSWORD: bt0sEfdGA8Cg
+    ports:
+      - "8080:8080"
