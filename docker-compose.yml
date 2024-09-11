@@ -4,17 +4,29 @@ services:
   app:
     build: .
     container_name: spring-boot-app
+    depends_on:
+      - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ep-little-cloud-a4kqhyef.us-east-1.aws.neon.tech:5432/verceldb
-      - SPRING_DATASOURCE_USERNAME=default
-      - SPRING_DATASOURCE_PASSWORD=bt0sEfdGA8Cg
-      - SERVER_PORT=${PORT} # Render define a variável PORT automaticamente
+      - POSTGRES_USER=$USERNAME
+      - POSTGRES_PASSWORD=$PASSWORD
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/$DB_NAME
+      - SPRING_DATASOURCE_USERNAME=$USERNAME
+      - SPRING_DATASOURCE_PASSWORD=$PASSWORD
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
       - "${PORT}:${PORT}"
     depends_on:
-      - wait-for-db
-
-  wait-for-db:
-    image: jwilder/dockerize
-    # command: dockerize -wait tcp://${DB_HOST}:${DB_PORT} -timeout 60s
-    depends_on: []
+      - db
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      - POSTGRES_USER=$USERNAME
+      - POSTGRES_PASSWORD=$PASSWORD
+      - POSTGRES_DB=$DB_NAME
+    ports:
+      - "$LOCAL_PORT:$DOCKER_PORT"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  db-data:
